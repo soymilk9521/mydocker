@@ -1,0 +1,64 @@
+version: '3.7'
+
+services:
+ 
+  activemq:
+    # 使用的镜像
+    image: webcenter/activemq:5.14.3
+    # 定义主机名
+    hostname: myactivemq
+    
+    # 环境设置
+    environment:
+      - ACTIVEMQ_CONFIG_NAME=amqp-srv1
+      - ACTIVEMQ_CONFIG_DEFAULTACCOUNT=false
+      - ACTIVEMQ_ADMIN_LOGIN=admin
+      - ACTIVEMQ_ADMIN_PASSWORD=admin
+      - ACTIVEMQ_USERS_myproducer=p1234
+      - ACTIVEMQ_GROUPS_writes=myproducer
+      - ACTIVEMQ_USERS_myconsumer=c1234
+      - ACTIVEMQ_GROUPS_reads=myconsumer
+      - ACTIVEMQ_JMX_user1_role=readwrite
+      - ACTIVEMQ_JMX_user1_password=j1234
+      - ACTIVEMQ_JMX_user2_role=read
+      - ACTIVEMQ_JMX_user2_password=j1234
+      - ACTIVEMQ_CONFIG_TOPICS_topic1=mytopic1
+      - ACTIVEMQ_CONFIG_TOPICS_topic2=mytopic2
+      - ACTIVEMQ_CONFIG_QUEUES_queue1=myqueue1
+      - ACTIVEMQ_CONFIG_QUEUES_queue2=myqueue2
+      - ACTIVEMQ_CONFIG_MINMEMORY=1024
+      - ACTIVEMQ_CONFIG_MAXMEMORY=4096
+      - ACTIVEMQ_CONFIG_SCHEDULERENABLED=true
+    # 容器的映射端口
+    ports:
+      - 1883:1883 # MQTT
+      - 5672:5672 # AMQP
+      - 8161:8161 # Web Console
+      - 61608:61608 # AUTO+NIO
+      - 61613:61613 # STOMP
+      - 61614:61614 # WS
+      - 61616:61616 # OpenWire
+      - 61618:61618 # NIO
+    restart: always
+    # 定义挂载点
+    volumes:
+      - ./data/activemq:/data/activemq
+      - ./var/log/activemq:/var/log/activemq
+      - ./conf/activemq.xml:/opt/activemq/conf/activemq.xml
+      - ./lib/mysql-connector-java-5.1.38.jar:/opt/activemq/lib/mysql-connector-java-5.1.38.jar
+    links:
+      - mysql
+  
+  mysql:
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3306:3306
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+      - ./conf/mysql/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
+      - ./var/log/mysql:/var/log/mysql
+
