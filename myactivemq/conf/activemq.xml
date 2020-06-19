@@ -78,10 +78,19 @@
 
             http://activemq.apache.org/persistence.html
         -->
-        <persistenceAdapter>
-            <!-- <kahaDB directory="${activemq.data}/kahadb"/> -->
-            <jdbcPersistenceAdapter dataSource="#mysql-ds" />
-        </persistenceAdapter>
+        <!-- <persistenceAdapter>-->
+            <!-- <kahaDB directory="${activemq.data}/kahadb"/> -->  <!--kahaDB-->
+            <!-- <jdbcPersistenceAdapter dataSource="#mysql-ds" /> --><!--jdbc-->
+		<!-- </persistenceAdapter>-->
+        <persistenceFactory>
+            <journalPersistenceAdapterFactory 
+                journalLogFiles="5" 
+                journalLogFileSize="32768"
+                useJournal="true"
+                useQuickJournal="true"
+                dataDirectory="${basedir}/activemq-data" 
+                dataSource="#mysql-ds"/> <!--jdbc journal-->
+        </persistenceFactory>
 
 
           <!--
