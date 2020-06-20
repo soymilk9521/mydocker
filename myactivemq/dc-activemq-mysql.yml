@@ -5,6 +5,8 @@ services:
   activemq:
     # 使用的镜像
     image: webcenter/activemq:5.14.3
+    networks:
+      - mqnet
     # 定义主机名
     hostname: myactivemq
     
@@ -46,11 +48,13 @@ services:
       - ./var/log/activemq:/var/log/activemq
       - ./conf/activemq.xml:/opt/activemq/conf/activemq.xml
       - ./lib/mysql-connector-java-5.1.38.jar:/opt/activemq/lib/mysql-connector-java-5.1.38.jar
-    links:
+    depends_on:
       - mysql
   
   mysql:
     image: mysql:5.7
+    networks:
+      - mqnet
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
@@ -62,3 +66,5 @@ services:
       - ./conf/mysql/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
       - ./var/log/mysql:/var/log/mysql
 
+networks:
+  mqnet:

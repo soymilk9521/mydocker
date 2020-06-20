@@ -1,0 +1,65 @@
+version: '3.7'
+
+services:
+ 
+  mq_node01:
+    # 使用的镜像
+    image: webcenter/activemq:5.14.3
+    networks:
+      - mqcluster
+    # 定义主机名
+    hostname: myactivemq
+    # 容器的映射端口
+    ports:
+      - 8161:8161 # Web Console
+      - 61616:61616 # OpenWire
+      - 63631:63631 # levelDB
+    restart: always
+    # 定义挂载点
+    volumes:
+      - ./data/activemq/mq_node01:/data/activemq
+      - ./var/log/activemq/mq_node01:/var/log/activemq
+      - ./conf/mq_node01/activemq.xml:/opt/activemq/conf/activemq.xml
+
+  mq_node02:
+    # 使用的镜像
+    image: webcenter/activemq:5.14.3
+    networks:
+      - mqcluster
+    # 定义主机名
+    hostname: myactivemq
+    # 容器的映射端口
+    ports:
+      - 8162:8161 # Web Console
+      - 61617:61616 # OpenWire
+      - 63632:63631 # levelDB
+    restart: always
+    # 定义挂载点
+    volumes:
+      - ./data/activemq/mq_node02:/data/activemq
+      - ./var/log/activemq/mq_node02:/var/log/activemq
+      - ./conf/mq_node02/activemq.xml:/opt/activemq/conf/activemq.xml
+
+  mq_node03:
+    # 使用的镜像
+    image: webcenter/activemq:5.14.3
+    networks:
+      - mqcluster
+    # 定义主机名
+    hostname: myactivemq
+    # 容器的映射端口
+    ports:
+      - 8163:8161 # Web Console
+      - 61618:61616 # OpenWire
+      - 63633:63631 # levelDB
+    restart: always
+    # 定义挂载点
+    volumes:
+      - ./data/activemq/mq_node03:/data/activemq
+      - ./var/log/activemq/mq_node03:/var/log/activemq
+      - ./conf/mq_node03/activemq.xml:/opt/activemq/conf/activemq.xml
+
+networks:
+  mqcluster:
+
+
