@@ -8,7 +8,7 @@ services:
     networks:
       - mqcluster
     # 定义主机名
-    hostname: myactivemq
+    hostname: lr.mq1.com
     # 容器的映射端口
     ports:
       - 8161:8161 # Web Console
@@ -27,7 +27,7 @@ services:
     networks:
       - mqcluster
     # 定义主机名
-    hostname: myactivemq
+    hostname: lr.mq2.com
     # 容器的映射端口
     ports:
       - 8162:8161 # Web Console
@@ -46,7 +46,7 @@ services:
     networks:
       - mqcluster
     # 定义主机名
-    hostname: myactivemq
+    hostname: lr.mq3.com
     # 容器的映射端口
     ports:
       - 8163:8161 # Web Console
