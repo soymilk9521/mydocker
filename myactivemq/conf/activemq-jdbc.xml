@@ -78,9 +78,19 @@
 
             http://activemq.apache.org/persistence.html
         -->
-        <persistenceAdapter>
-            <kahaDB directory="${activemq.data}/kahadb"/>
-        </persistenceAdapter>
+        <!-- <persistenceAdapter>-->
+            <!-- <kahaDB directory="${activemq.data}/kahadb"/> -->  <!--kahaDB-->
+            <!-- <jdbcPersistenceAdapter dataSource="#mysql-ds" /> --><!--jdbc-->
+		<!-- </persistenceAdapter>-->
+        <persistenceFactory>
+            <journalPersistenceAdapterFactory 
+                journalLogFiles="5" 
+                journalLogFileSize="32768"
+                useJournal="true"
+                useQuickJournal="true"
+                dataDirectory="${basedir}/activemq-data" 
+                dataSource="#mysql-ds"/> <!--jdbc journal-->
+        </persistenceFactory>
 
 
           <!--
@@ -115,7 +125,7 @@
             <transportConnector name="stomp" uri="stomp://0.0.0.0:61613?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
             <transportConnector name="mqtt" uri="mqtt://0.0.0.0:1883?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
             <transportConnector name="ws" uri="ws://0.0.0.0:61614?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
-		</transportConnectors>
+	</transportConnectors>
 
         <!-- destroy the spring context on shutdown to stop jetty -->
         <shutdownHooks>
@@ -123,7 +133,15 @@
         </shutdownHooks>
 
     </broker>
-
+    
+    <bean id="mysql-ds" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close"> 
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/> 
+        <property name="url" value="jdbc:mysql://mysql/activemq?relaxAutoCommit=true"/> 
+        <property name="username" value="root"/> 
+        <property name="password" value="root"/> 
+        <property name="maxTotal" value="200" />
+        <property name="poolPreparedStatements" value="true"/> 
+    </bean> 
     <!--
         Enable web consoles, REST and Ajax APIs and demos
         The web consoles requires by default login, you can disable this in the jetty.xml file

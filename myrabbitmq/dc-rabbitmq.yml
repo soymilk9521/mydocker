@@ -1,0 +1,20 @@
+version: '3.7'
+
+services:
+ 
+  rabbitmq:
+    container_name: myrabbitmq 
+    # 使用的镜像
+    image: rabbitmq:3-management
+    # 定义主机名
+    hostname: myrabbitmq
+    # 环境设置
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    
+    # 容器的映射端口
+    ports:
+      - 5672:5672 # AMQP
+      - 15672:15672 # Web Console
+    restart: always
